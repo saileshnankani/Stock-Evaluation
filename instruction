@@ -1,0 +1,18 @@
+INSTRUCTIONS
+
+Project by: Rosie (Mahshid) Bahrani, Angelo Gabriel Lao, Sailesh Nankani
+
+This is the instruction for running the project code.
+
+Make sure to run the code with Python2. DO NOT run the code with Python 3 as this can cause unexpected results. 
+
+The following libraries were used for data analysis. Please make sure that you have installed them all before running the program.
+unirest
+pandas_datareader
+pandas
+numpy
+datatime
+pandas_datareader.data
+matplotlib.pyplot
+
+In case you have any trouble with running the program, please contact rosie.bahrani@uwaterloo.ca for an in-person demo.
