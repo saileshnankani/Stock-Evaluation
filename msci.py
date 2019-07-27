@@ -76,13 +76,16 @@ def PARTa():
     for i in iter:
         return_port[i] = data1[i]*stock1prop + data2[i]*stock2prop
     
-    std_port = np.std(return_port)
+    var_port = np.var(return_port)
+    annual_var = var_port*12
+    annual_std = (annual_var)**(1.0/2.0)
     eReturn = stock1prop*mean1 + stock2prop*mean2
+    annual_return = (1+eReturn)**12 - 1
 
     print "MVP proportion " + stock1 + ": " + str(round(stock1prop*100,2)) + "%"
     print "MVP proportion " + stock2 + ": " + str(round(stock2prop*100,2)) + "%"
-    print "MVP standard deviation: " + str(round(std_port*100,2)) + "%"
-    print "MVP expected portfolio return: " + str(round(eReturn*100,2)) + "%"
+    print "MVP standard deviation: " + str(round(annual_std*100,2)) + "%"
+    print "MVP expected portfolio return: " + str(round(annual_return*100,2)) + "%"
 
 
 # PART B OF THE PROJECT
