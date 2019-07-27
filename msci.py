@@ -28,12 +28,17 @@ aapl_weekly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime
 aapl_monthly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
 
 
+def monthly_return(stock):
+    lis = []
+    i = 1  
+    while i < ((stock['Close']).size):
+        lis.append(stock['Close'][i]/stock['Close'][i-1] - 1)
+        i+=1
+    return lis
 
 start_date = '2010-01-01'
 end_date = '2016-12-31'
 
-#panel_data = data.DataReader('INPX', 'yahoo', start_date, end_date)
-'''
 def PARTa():
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
@@ -46,11 +51,11 @@ def PARTa():
     del stock2_monthly['Adj Close'] # we do not need this data
     del stock2_monthly['Volume']
     
-    stock1_monthly['Return'] = (stock1_monthly['Close'] - stock1_monthly['Open']) / stock1_monthly['Open']
-    stock2_monthly['Return'] = (stock2_monthly['Close'] - stock2_monthly['Open']) / stock2_monthly['Open']
+    return1 = monthly_return(stock1_monthly)
+    return2 = monthly_return(stock2_monthly)
     
-    data1 = np.array(stock1_monthly['Return'], dtype = np.float)
-    data2 = np.array(stock2_monthly['Return'], dtype = np.float)
+    data1 = np.array(return1, dtype = np.float)
+    data2 = np.array(return2, dtype = np.float)
     
     mean1 = np.mean(data1)
     mean2 = np.mean(data2)
@@ -74,14 +79,14 @@ def PARTa():
     std_port = np.std(return_port)
     eReturn = stock1prop*mean1 + stock2prop*mean2
 
-    print("MVP proportion ", stock1, ": ", round(stock1prop*100,2), "%")
-    print("MVP proportion ", stock2, ": ", round(stock2prop*100,2), "%")
-    print("MVP standard deviation: ", round(std_port*100,2), "%")
-    print("MVP expected portfolio return: ", round(eReturn*100,2), "%")
+    print "MVP proportion " + stock1 + ": " + str(round(stock1prop*100,2)) + "%"
+    print "MVP proportion " + stock2 + ": " + str(round(stock2prop*100,2)) + "%"
+    print "MVP standard deviation: " + str(round(std_port*100,2)) + "%"
+    print "MVP expected portfolio return: " + str(round(eReturn*100,2)) + "%"
 
 
 # PART B OF THE PROJECT
-
+'''
 def PARTb():
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
@@ -95,8 +100,8 @@ def PARTb():
     del stock2_monthly['Adj Close'] # we do not need this data
     del stock2_monthly['Volume']
     
-    stock1_monthly['Return'] = (stock1_monthly['Close'] - stock1_monthly['Open']) / stock1_monthly['Open']
-    stock2_monthly['Return'] = (stock2_monthly['Close'] - stock2_monthly['Open']) / stock2_monthly['Open']
+    stock1_monthly['Return'] = monthly_return(stock1_monthly)
+    stock2_monthly['Return'] = monthly_return(stock2_monthly)
     
     data1 = np.array(stock1_monthly['Return'], dtype = np.float)
     data2 = np.array(stock2_monthly['Return'], dtype = np.float)
@@ -148,7 +153,7 @@ def PARTb():
     print("Portfolio standard deviation ", round(stdev_port3*100, 2), "%")
     print()
 
-'''
+
 def PARTc():
     # bonus part
     number = 7.0
@@ -169,13 +174,13 @@ def PARTc():
     stock7_monthly = pdr.get_data_yahoo(stock7, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
    
 
-    stock1_monthly['Return'] = (stock1_monthly['Close'] - stock1_monthly['Open']) / stock1_monthly['Open']
-    stock2_monthly['Return'] = (stock2_monthly['Close'] - stock2_monthly['Open']) / stock2_monthly['Open']
-    stock3_monthly['Return'] = (stock3_monthly['Close'] - stock3_monthly['Open']) / stock3_monthly['Open']
-    stock4_monthly['Return'] = (stock4_monthly['Close'] - stock4_monthly['Open']) / stock4_monthly['Open']
-    stock5_monthly['Return'] = (stock5_monthly['Close'] - stock5_monthly['Open']) / stock5_monthly['Open']
-    stock6_monthly['Return'] = (stock6_monthly['Close'] - stock6_monthly['Open']) / stock6_monthly['Open']
-    stock7_monthly['Return'] = (stock7_monthly['Close'] - stock7_monthly['Open']) / stock7_monthly['Open']
+    stock1_monthly['Return'] = monthly_return(stock1_monthly)
+    stock2_monthly['Return'] = monthly_return(stock2_monthly)
+    stock3_monthly['Return'] = monthly_return(stock3_monthly)
+    stock4_monthly['Return'] = monthly_return(stock4_monthly)
+    stock5_monthly['Return'] = monthly_return(stock5_monthly)
+    stock6_monthly['Return'] = monthly_return(stock6_monthly)
+    stock7_monthly['Return'] = monthly_return(stock7_monthly)
 
     data1 = np.array(stock1_monthly['Return'], dtype = np.float)
     data2 = np.array(stock2_monthly['Return'], dtype = np.float)
@@ -222,8 +227,8 @@ def PARTc():
     print(stock1, stock2, stock3, stock4, stock5, stock6, stock7)
     print("Expected return is:", round(eReturn_port*100, 2), "%")
     print("Expected standard deviation is:", round(stdev_port*100, 2), "%")
-
+'''
 if __name__ == "__main__":
-    #PARTa()
+    PARTa()
     #PARTb()
-    PARTc() # bonus part
+    #PARTc()  bonus part
