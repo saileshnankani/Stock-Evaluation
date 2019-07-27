@@ -36,8 +36,16 @@ def monthly_return(stock):
         i+=1
     return lis
 
+def calc_SR(w,mu,Sigma,rf):
+    return_p = np.matmul(w,mu.T)
+    var_p= np.matmul(np.matmul(w,Sigma),w.T)
+    sd_p = np.sqrt(var_p)
+    return((return_p - rf)/sd_p)
+
 start_date = '2010-01-01'
 end_date = '2016-12-31'
+
+rf = 0.02
 
 def PARTa():
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
@@ -59,14 +67,19 @@ def PARTa():
     
     mean1 = np.mean(data1)
     mean2 = np.mean(data2)
+    annual_return1 = (1+mean1)**12 - 1
+    annual_return2 = (1+mean2)**12 - 1
 
     var1 = np.var(data1) 
     var2 = np.var(data2)
+    var1annual = var1*12
+    var2annual = var2*12
     
     std1 = np.std(var1) 
     std2 = np.std(var2)
     
     covar = np.cov(data1, data2)[0][1]
+    covar_annual = covar*12
 
     stock1prop = (var2 - covar)/(var1 + var2 - 2*covar)
     stock2prop = 1 - stock1prop
@@ -86,6 +99,27 @@ def PARTa():
     print "MVP proportion " + stock2 + ": " + str(round(stock2prop*100,2)) + "%"
     print "MVP standard deviation: " + str(round(annual_std*100,2)) + "%"
     print "MVP expected portfolio return: " + str(round(annual_return*100,2)) + "%"
+
+    # PLOTTING THE DATA
+    weights_1 = np.array(list(range(0,11)))/10.0
+    weights_2 = 1 - weights_1 
+    weights   = np.array([weights_1,weights_2]).T
+    returns = np.array([annual_return1, annual_return2])
+    covariance = np.array([[var1annual,covar_annual],[covar_annual,var2annual]])
+    port_returns = [w[0] * returns[0] + w[1] * returns[1] for w in weights]
+    port_vars = [w[0]**2*covariance[0,0] + w[1]**2*covariance[1,1] + 2*w[0]*w[1]*covariance[0,1] for w in weights]
+    port_sds = [np.sqrt(v) for v in port_vars]
+    port_SRs = [calc_SR(w,returns,covariance,rf) for w in weights]
+    df = pd.DataFrame([port_returns,port_sds, port_SRs]).transpose()
+    df.columns=['Returns', 'Volatility', 'Sharpe Ratio']
+    plt.style.use('seaborn-dark')
+    df.plot.scatter(x='Volatility', y='Returns', c='Sharpe Ratio', cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True)
+    plt.xlabel('Volatility (Std. Deviation)')
+    plt.ylabel('Expected Returns')
+    plt.title('Efficient Frontier')
+    plt.show()
+
+
 
 
 # PART B OF THE PROJECT
