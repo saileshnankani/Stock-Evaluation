@@ -8,8 +8,8 @@ Make sure to run the code with Python2. DO NOT run the code with Python 3 as thi
 '''python2 msci.py'''
 
 The following libraries were used for data analysis. Please make sure that you have installed them all before running the program.
-unirest
-pandas_datareader
+unirest - version
+pandas_datareader - version
 pandas
 numpy
 datatime

@@ -290,6 +290,6 @@ def PARTc():
     print("Expected standard deviation is:", round(stdev_port*100, 2), "%")
 '''
 if __name__ == "__main__":
-    #PARTa()
+    PARTa()
     PARTb()
     #PARTc()
