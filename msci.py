@@ -1,4 +1,7 @@
+from scipy.optimize import minimize
 import unirest
+import math
+
 
 response = unirest.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?region=US&symbol=AMRN",
   headers={
@@ -37,6 +40,7 @@ def monthly_return(stock):
     return lis
 
 def calc_SR(w,mu,Sigma,rf):
+    #this one is used for Q1
     return_p = np.matmul(w,mu.T)
     var_p= np.matmul(np.matmul(w,Sigma),w.T)
     sd_p = np.sqrt(var_p)
@@ -53,11 +57,6 @@ def PARTa():
     
     stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
     stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    
-    del stock1_monthly['Adj Close'] # we do not need this data
-    del stock1_monthly['Volume']
-    del stock2_monthly['Adj Close'] # we do not need this data
-    del stock2_monthly['Volume']
     
     return1 = monthly_return(stock1_monthly)
     return2 = monthly_return(stock2_monthly)
@@ -123,74 +122,99 @@ def PARTa():
 
 
 # PART B OF THE PROJECT
-'''
+
 def PARTb():
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
     rf = raw_input("what is your risk-free rate? if you do not know, just enter 0.02. DO NOT enter in percentages!!!")
-    
+    rf = float(rf)
+
     stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
     stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
     
-    del stock1_monthly['Adj Close'] # we do not need this data
-    del stock1_monthly['Volume']
-    del stock2_monthly['Adj Close'] # we do not need this data
-    del stock2_monthly['Volume']
+    return1 = monthly_return(stock1_monthly)
+    return2 = monthly_return(stock2_monthly)
     
-    stock1_monthly['Return'] = monthly_return(stock1_monthly)
-    stock2_monthly['Return'] = monthly_return(stock2_monthly)
-    
-    data1 = np.array(stock1_monthly['Return'], dtype = np.float)
-    data2 = np.array(stock2_monthly['Return'], dtype = np.float)
+    data1 = np.array(return1, dtype = np.float)
+    data2 = np.array(return2, dtype = np.float)
     
     mean1 = np.mean(data1)
     mean2 = np.mean(data2)
+    annual_return1 = (1+mean1)**12 - 1
+    annual_return2 = (1+mean2)**12 - 1
 
     var1 = np.var(data1) 
     var2 = np.var(data2)
-    
+    var1annual = var1*12
+    var2annual = var2*12
+
+    covar = np.cov(data1, data2)[0][1]
+    covariance = covar*12
+
     std1 = np.std(var1) 
     std2 = np.std(var2)
     
-    stock1prop = 
+    b = (0.0, 1.0) # this is the constraint for the stockprop values
+    bnds = (b)
+
+    def sharpe_ratio(stock1prop_guess):
+        #this one is used for Q2
+        #note: this function returns the negative of the sharpe ratio, so when we minimize this, we are actually maximizing the sharpe ratio itself.
+        stock2prop_guess = 1 - stock1prop_guess
+        r_port = stock1prop_guess*annual_return1 + stock2prop_guess*annual_return2
+        rf = 0.02
+        var_port = stock1prop_guess**2 * var1annual + stock2prop_guess**2 * var2annual + 2*stock1prop_guess*stock2prop_guess*covariance
+        stdev_port = math.sqrt(var_port)
+        res = (r_port - rf)/stdev_port
+        return -1*res #just to minimize this value
+
+
+    if std1 >= std2:
+        stock1prop_guess = 0.99
+    if std1 < std2:
+        stock1prop_guess = 0.01
+    res = minimize(sharpe_ratio, stock1prop_guess, bounds=((0.0, 1.0),))
+    stock1prop = res.x[0]
     stock2prop = 1 - stock1prop
     
-    eReturn_port1 = 
-    stdev_port1 =
-    stdev_excess = 
-    sharpe = (eReturn_port1 - rf)/stdev_excess 
+    eReturn_port1 = stock1prop*annual_return1 + stock2prop*annual_return2
+    var_port1 = stock1prop**2 * var1annual + stock2prop**2 * var2annual + 2*stock1prop*stock2prop*covariance
+    stdev_port1 = (var_port1)**(0.5)
+    sharpe_max = (eReturn_port1 - rf)/stdev_port1 
 
     eReturn_port2 = rf*0.5 + eReturn_port1*0.5
-    stdev_port2 = 
+    var_port2 = 0.5**2 * var_port1 
+    stdev_port2 = math.sqrt(var_port2)
 
     eReturn_port3 = rf*(-0.5) + eReturn_port1*1.5
-    stdev_port3 = 
+    var_port3 = 1.5**2 * var_port1
+    stdev_port3 = math.sqrt(var_port3)
 
-    print("Case 1")
-    print("Given-Proportion invested in risk-free asset: 0%")
-    print("Given-Proportion invested in market portfolio: 100%")
-    print("Maximum Sharpe ratio", round(sharpe_max, 4))
-    print("Market portfolio proportion ", stock1, round(stock1prop*100, 2), "%")
-    print("Market portfolio proportion ", stock2, round(stock2prop*100, 2), "%")
-    print("Market expected return ", round(eReturn_port1*100, 2), "%")
-    print("Market standard deviation ", round(stdev_port1*100, 2), "%")
-    print()
+    print "Case 1"
+    print "Given-Proportion invested in risk-free asset: 0%"
+    print "Given-Proportion invested in market portfolio: 100%"
+    print "Maximum Sharpe ratio: " + str(round(sharpe_max, 4))
+    print "Market portfolio proportion: " + stock1 + " " + str(round(stock1prop*100, 2)) + "%"
+    print "Market portfolio proportion: " + stock2 + " " + str(round(stock2prop*100, 2)) + "%"
+    print "Market expected return: " + str(round(eReturn_port1*100, 2)) + "%"
+    print "Market standard deviation: "+ str(round(stdev_port1*100, 2)) + "%"
+    print ""
 
-    print("Case 2")
-    print("Given-Proportion invested in risk-free asset: 50%")
-    print("Given-Proportion invested in market portfolio: 50%")
-    print("Portfolio expected return ", round(eReturn_port2*100, 2), "%")
-    print("Portfolio standard deviation ", round(stdev_port2*100, 2), "%")
-    print()
+    print "Case 2"
+    print "Given-Proportion invested in risk-free asset: 50%"
+    print "Given-Proportion invested in market portfolio: 50%"
+    print "Portfolio expected return: " + str(round(eReturn_port2*100, 2)) + "%"
+    print "Portfolio standard deviation: " + str(round(stdev_port2*100, 2)) + "%"
+    print ""
     
-    print("Case 3")
-    print("Given-Proportion invested in risk-free asset: -50%")
-    print("Given-Proportion invested in market portfolio: 150%")
-    print("Portfolio expected return ", round(eReturn_port3*100, 2), "%")
-    print("Portfolio standard deviation ", round(stdev_port3*100, 2), "%")
-    print()
+    print "Case 3"
+    print "Given-Proportion invested in risk-free asset: -50%"
+    print "Given-Proportion invested in market portfolio: 150%"
+    print "Portfolio expected return: " + str(round(eReturn_port3*100, 2)) + "%"
+    print "Portfolio standard deviation: " + str(round(stdev_port3*100, 2)) + "%"
+    print ""
 
-
+'''
 def PARTc():
     # bonus part
     number = 7.0
@@ -266,6 +290,6 @@ def PARTc():
     print("Expected standard deviation is:", round(stdev_port*100, 2), "%")
 '''
 if __name__ == "__main__":
-    PARTa()
-    #PARTb()
-    #PARTc()  bonus part
+    #PARTa()
+    PARTb()
+    #PARTc()
