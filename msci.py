@@ -24,11 +24,11 @@ import matplotlib.pyplot as plt
 
 from datetime import datetime
 
-aapl_daily = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1))
+#aapl_daily = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1))
 
-aapl_weekly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='w')
+#aapl_weekly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='w')
 
-aapl_monthly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
+#aapl_monthly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
 
 
 def monthly_return(stock):
@@ -126,8 +126,6 @@ def PARTa():
 def PARTb():
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
-    rf = raw_input("what is your risk-free rate? if you do not know, just enter 0.02. DO NOT enter in percentages!!!")
-    rf = float(rf)
 
     stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
     stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
@@ -193,6 +191,7 @@ def PARTb():
     print "Case 1"
     print "Given-Proportion invested in risk-free asset: 0%"
     print "Given-Proportion invested in market portfolio: 100%"
+    print ""
     print "Maximum Sharpe ratio: " + str(round(sharpe_max, 4))
     print "Market portfolio proportion: " + stock1 + " " + str(round(stock1prop*100, 2)) + "%"
     print "Market portfolio proportion: " + stock2 + " " + str(round(stock2prop*100, 2)) + "%"
@@ -203,6 +202,7 @@ def PARTb():
     print "Case 2"
     print "Given-Proportion invested in risk-free asset: 50%"
     print "Given-Proportion invested in market portfolio: 50%"
+    print ""
     print "Portfolio expected return: " + str(round(eReturn_port2*100, 2)) + "%"
     print "Portfolio standard deviation: " + str(round(stdev_port2*100, 2)) + "%"
     print ""
