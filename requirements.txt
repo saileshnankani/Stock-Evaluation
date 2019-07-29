@@ -8,14 +8,14 @@ Make sure to run the code with Python2. DO NOT run the code with Python 3 as thi
 '''python2 msci.py'''
 
 The following libraries were used for data analysis. Please make sure that you have installed them all before running the program.
-unirest -- version NOT FOUND -- discussed with Fuat in class & he said it's alright if we don't find the version for this.
-pandas_datareader -- version u'0.7.0'
-pandas -- version 0.24.2
-numpy -- vesrion 1.16.4
-datetime -- version unavailable as datetime is a python function, not an external library
-pandas_datareader.data -- version u'0.7.0'
-matplotlib.pyplot -- version '2.2.4'
-scipy -- version 1.2.2
+unirest - version
+pandas_datareader - version
+pandas
+numpy
+datatime
+pandas_datareader.data
+matplotlib.pyplot
+scipy
 
 In case you have any trouble with running the program, please contact rosie.bahrani@uwaterloo.ca for an in-person demo.
 
