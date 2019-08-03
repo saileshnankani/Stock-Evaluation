@@ -24,11 +24,11 @@ import matplotlib.pyplot as plt
 
 from datetime import datetime
 
-#aapl_daily = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1))
+#aapl_daily = pdr.get_data_yahoo('AAPL',start=datetime(2018, 6, 1), end=datetime(2019, 6, 1))
 
-#aapl_weekly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='w')
+#aapl_weekly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 6, 1), end=datetime(2019, 6, 1),interval='w')
 
-#aapl_monthly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
+#aapl_monthly = pdr.get_data_yahoo('AAPL',start=datetime(2018, 6, 1), end=datetime(2019, 6, 1),interval='m')
 
 
 def monthly_return(stock):
@@ -52,11 +52,13 @@ end_date = '2016-12-31'
 rf = 0.02
 
 def PARTa():
+    print "----- PART A -----"
+    
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
     
-    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
+    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
     
     return1 = monthly_return(stock1_monthly)
     return2 = monthly_return(stock2_monthly)
@@ -98,6 +100,7 @@ def PARTa():
     print "MVP proportion " + stock2 + ": " + str(round(stock2prop*100,2)) + "%"
     print "MVP standard deviation: " + str(round(annual_std*100,2)) + "%"
     print "MVP expected portfolio return: " + str(round(annual_return*100,2)) + "%"
+    print ""
 
     # PLOTTING THE DATA
     weights_1 = np.array(list(range(0,11)))/10.0
@@ -124,11 +127,13 @@ def PARTa():
 # PART B OF THE PROJECT
 
 def PARTb():
+    print "----- PART B -----"
+
     stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
     stock2 = raw_input("Enter the second one.")
 
-    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
+    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
     
     return1 = monthly_return(stock1_monthly)
     return2 = monthly_return(stock2_monthly)
@@ -149,7 +154,7 @@ def PARTb():
     covar = np.cov(data1, data2)[0][1]
     covariance = covar*12
 
-    std1 = np.std(var1) 
+    std1 = np.std(var1)
     std2 = np.std(var2)
     
     b = (0.0, 1.0) # this is the constraint for the stockprop values
@@ -214,82 +219,130 @@ def PARTb():
     print "Portfolio standard deviation: " + str(round(stdev_port3*100, 2)) + "%"
     print ""
 
-'''
+
 def PARTc():
     # bonus part
-    number = 7.0
-    stock1 = 'DVCR'
-    stock2 = 'TDOC'
-    stock3 = 'UHS'
-    stock4 = 'SBUX' # high returns
-    stock5 = 'CSU'
-    stock6 = 'EXPI'
-    stock7 = 'ORPEF'
+    print "----- BONUS -----"
+    
+    number = 5.0
+    stock1 = 'IBDRY'
+    stock2 = 'DCUD'
+    stock3 = 'AEP'
+    stock4 = 'CLPHY'
+    stock5 = 'FE'
 
-    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock3_monthly = pdr.get_data_yahoo(stock3, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock4_monthly = pdr.get_data_yahoo(stock4, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock5_monthly = pdr.get_data_yahoo(stock5, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock6_monthly = pdr.get_data_yahoo(stock6, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-    stock7_monthly = pdr.get_data_yahoo(stock7, start=datetime(2018, 7, 1), end=datetime(2019, 7, 1),interval='m')
-   
+    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock3_monthly = pdr.get_data_yahoo(stock3, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock4_monthly = pdr.get_data_yahoo(stock4, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock5_monthly = pdr.get_data_yahoo(stock5, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    
+    return1 = monthly_return(stock1_monthly)
+    return2 = monthly_return(stock2_monthly)
+    return3 = monthly_return(stock3_monthly)
+    return4 = monthly_return(stock4_monthly)
+    return5 = monthly_return(stock5_monthly)
 
-    stock1_monthly['Return'] = monthly_return(stock1_monthly)
-    stock2_monthly['Return'] = monthly_return(stock2_monthly)
-    stock3_monthly['Return'] = monthly_return(stock3_monthly)
-    stock4_monthly['Return'] = monthly_return(stock4_monthly)
-    stock5_monthly['Return'] = monthly_return(stock5_monthly)
-    stock6_monthly['Return'] = monthly_return(stock6_monthly)
-    stock7_monthly['Return'] = monthly_return(stock7_monthly)
-
-    data1 = np.array(stock1_monthly['Return'], dtype = np.float)
-    data2 = np.array(stock2_monthly['Return'], dtype = np.float)
-    data3 = np.array(stock3_monthly['Return'], dtype = np.float)
-    data4 = np.array(stock4_monthly['Return'], dtype = np.float)
-    data5 = np.array(stock5_monthly['Return'], dtype = np.float)
-    data6 = np.array(stock6_monthly['Return'], dtype = np.float)
-    data7 = np.array(stock7_monthly['Return'], dtype = np.float)
+    data1 = np.array(return1, dtype = np.float)
+    data2 = np.array(return2, dtype = np.float)
+    data3 = np.array(return3, dtype = np.float)
+    data4 = np.array(return4, dtype = np.float)
+    data5 = np.array(return5, dtype = np.float)
     
     mean1 = np.mean(data1)
     mean2 = np.mean(data2)
     mean3 = np.mean(data3)
     mean4 = np.mean(data4)
     mean5 = np.mean(data5)
-    mean6 = np.mean(data6)
-    mean7 = np.mean(data7)
 
-    print("maximum return is from", max(mean1, mean2, mean3, mean4, mean5, mean6, mean7))
-    print(mean1)
-    print(mean2)
-    print(mean3)
-    print(mean4)
-    print(mean5)
-    print(mean6)
-    print(mean7)
-
-    stock1prop = 1.0/number 
+    stock1prop = 1.0/number
     stock2prop = 1.0/number
     stock3prop = 1.0/number
     stock4prop = 1.0/number
     stock5prop = 1.0/number
-    stock6prop = 1.0/number
-    stock7prop = 1.0/number
     
-    eReturn_port = stock1prop*mean1 + stock2prop*mean2 + stock3prop*mean3 + stock4prop*mean4 + stock5prop*mean5 + stock6prop*mean6 + stock7prop*mean7
+    eReturn_port = stock1prop*mean1 + stock2prop*mean2 + stock3prop*mean3 + stock4prop*mean4 + stock5prop*mean5
+    annual_return = (1+eReturn_port)**12 - 1
     
     iter = np.arange(data1.size)
     return_port = np.zeros(data1.size)
     for i in iter:
-        return_port[i] = data1[i]*stock1prop + data2[i]*stock2prop + data3[i]*stock3prop + data4[i]*stock4prop + data5[i]*stock5prop + data6[i]*stock6prop + data7[i]*stock7prop
-    stdev_port = np.std(return_port)
+        return_port[i] = data1[i]*stock1prop + data2[i]*stock2prop + data3[i]*stock3prop + data4[i]*stock4prop + data5[i]*stock5prop
+    var_port = np.var(return_port)
+    annual_var = var_port*12
+    annual_std = (annual_var)**(1.0/2.0)
 
-    print("The stocks that we chose are:")
-    print(stock1, stock2, stock3, stock4, stock5, stock6, stock7)
-    print("Expected return is:", round(eReturn_port*100, 2), "%")
-    print("Expected standard deviation is:", round(stdev_port*100, 2), "%")
+    print "The", int(number), "stocks that we chose are:"
+    print stock1, stock2, stock3, stock4, stock5
+    print "Expected return is:", round(annual_return*100, 2), "%"
+    print "Expected standard deviation is:", round(annual_std*100, 2), "%"
+
 '''
+def test2Stocks():
+    # bonus part
+    number = 2.0
+    stock1 = raw_input("what are the two stocks that you want to evaluate? Enter the first one.")
+    stock2 = raw_input("Enter the second one.")
+
+    stock1_monthly = pdr.get_data_yahoo(stock1, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    stock2_monthly = pdr.get_data_yahoo(stock2, start=datetime(2018, 6, 1), end=datetime(2019, 6, 2),interval='m')
+    
+
+    return1 = monthly_return(stock1_monthly)
+    return2 = monthly_return(stock2_monthly)
+
+    data1 = np.array(return1, dtype = np.float)
+    data2 = np.array(return2, dtype = np.float)
+    
+    mean1 = np.mean(data1)
+    mean2 = np.mean(data2)
+
+    print "mean"
+    print mean1 * 100, "%"
+    print mean2 * 100, "%"
+
+    print "std"
+    std1 = np.std(data1) 
+    std2 = np.std(data2)
+    print std1 * 100, "%"
+    print std2 * 100, "%"
+
+    stock1prop = 1.0/number 
+    stock2prop = 1.0/number
+    
+    eReturn_port = stock1prop*mean1 + stock2prop*mean2
+    annual_return = (1+eReturn_port)**12 - 1
+    
+    iter = np.arange(data1.size)
+    return_port = np.zeros(data1.size)
+    for i in iter:
+        return_port[i] = data1[i]*stock1prop + data2[i]*stock2prop
+    # stdev_port = np.std(return_port)
+    var_port = np.var(return_port)
+    annual_var = var_port*12
+    annual_std = (annual_var)**(1.0/2.0)
+
+    print "The stocks that we chose are:"
+    print stock1, stock2
+    print "Expected return is:", round(annual_return*100, 2), "%"
+    print "Expected standard deviation is:", round(annual_std*100, 2), "%"
+
+'''
+
 if __name__ == "__main__":
+    '''
+    while 1:
+        cmd = raw_input("Run: ");
+        if cmd == "1":
+            PARTa()
+        elif cmd == "2":
+            PARTb()
+        elif cmd == "3":
+            PARTc()
+        else:
+            test2Stocks()
+    '''
+
     PARTa()
     PARTb()
-    #PARTc()
+    PARTc()
