@@ -1,4 +1,4 @@
-#Stock Evaluation
+# Stock Evaluation
 
 Project by: Rosie (Mahshid) Bahrani, Angelo Gabriel Lao, Sailesh Nankani, Ruofan Xing
 
